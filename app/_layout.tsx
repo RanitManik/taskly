@@ -30,6 +30,7 @@ export default function Layout() {
                             color={color}
                         />
                     ),
+                    headerShown: false,
                 }}
             />
             <Tabs.Screen
