@@ -1,8 +1,8 @@
-import { ShoppingList } from "./components/ShoppingList";
+import { ShoppingList } from "../components/ShoppingList";
 import { StyleSheet, View } from "react-native";
-import { theme } from "./theme";
+import { theme } from "../theme";
 
-export default function App() {
+export default function Index() {
     return (
         <View style={styles.container}>
             <ShoppingList item="Coffee" />
