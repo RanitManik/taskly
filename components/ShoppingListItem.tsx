@@ -3,19 +3,19 @@ import { theme } from "../theme";
 import AntDesign from "@expo/vector-icons/AntDesign";
 
 type Props = {
-    item: string;
+    name: string;
     isCompleted?: boolean;
 };
 
-export const ShoppingList = ({ item, isCompleted }: Props) => {
+export const ShoppingListItem = ({ name, isCompleted }: Props) => {
     const handleDelete = () => {
         Alert.alert(
-            `are you sure you want to delete ${item}?`,
+            `are you sure you want to delete ${name}?`,
             "it will be gone for good.",
             [
                 {
                     text: "yes",
-                    onPress: () => console.log(`${item} deleted`),
+                    onPress: () => console.log(`${name} deleted`),
                     style: "destructive",
                 },
                 {
@@ -38,7 +38,7 @@ export const ShoppingList = ({ item, isCompleted }: Props) => {
                     isCompleted ? styles.completedText : null,
                 ]}
             >
-                {item}
+                {name}
             </Text>
             <TouchableOpacity activeOpacity={0.8} onPress={handleDelete}>
                 <AntDesign
