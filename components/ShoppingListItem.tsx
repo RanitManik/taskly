@@ -78,6 +78,7 @@ export const ShoppingListItem = ({
 const styles = StyleSheet.create({
     itemContainer: {
         borderBottomWidth: 1,
+        backgroundColor: theme.colorWhite,
         borderBottomColor: theme.colorCerulean,
         paddingHorizontal: 18,
         paddingVertical: 16,
