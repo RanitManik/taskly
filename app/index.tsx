@@ -1,5 +1,5 @@
 import { ShoppingListItem } from "../components/ShoppingListItem";
-import { ScrollView, StyleSheet, TextInput, View } from "react-native";
+import { FlatList, StyleSheet, TextInput, View, Text } from "react-native";
 import { theme } from "../theme";
 import { useState } from "react";
 
@@ -7,16 +7,12 @@ type ShoppingListItemType = {
     id: string;
     name: string;
 };
-const initialList: ShoppingListItemType[] = [
-    { id: "1", name: "coffee" },
-    { id: "2", name: "Tea" },
-    { id: "3", name: "Sugar" },
-];
 
 export default function Index() {
     const [value, setValue] = useState("");
-    const [shoppingList, setShoppingList] =
-        useState<ShoppingListItemType[]>(initialList);
+    const [shoppingList, setShoppingList] = useState<ShoppingListItemType[]>(
+        [],
+    );
 
     const handleSubmit = () => {
         if (value) {
@@ -30,23 +26,28 @@ export default function Index() {
     };
 
     return (
-        <ScrollView
+        <FlatList
+            data={shoppingList}
             style={styles.container}
             contentContainerStyle={styles.contentContainer}
             stickyHeaderIndices={[0]}
-        >
-            <TextInput
-                placeholder="E.g. coffee"
-                style={styles.textInput}
-                onChangeText={setValue}
-                returnKeyType="done"
-                value={value}
-                onSubmitEditing={handleSubmit}
-            />
-            {shoppingList.map((item) => (
-                <ShoppingListItem name={item.name} key={item.id} />
-            ))}
-        </ScrollView>
+            ListEmptyComponent={
+                <View style={styles.listEmptyContainer}>
+                    <Text>Your shopping list is empty</Text>
+                </View>
+            }
+            ListHeaderComponent={
+                <TextInput
+                    placeholder="E.g. coffee"
+                    style={styles.textInput}
+                    onChangeText={setValue}
+                    returnKeyType="done"
+                    value={value}
+                    onSubmitEditing={handleSubmit}
+                />
+            }
+            renderItem={({ item }) => <ShoppingListItem name={item.name} />}
+        />
     );
 }
 
@@ -70,5 +71,11 @@ const styles = StyleSheet.create({
         fontSize: 18,
         borderRadius: 50,
         backgroundColor: theme.colorWhite,
+    },
+
+    listEmptyContainer: {
+        justifyContent: "center",
+        alignItems: "center",
+        marginVertical: 18,
     },
 });
