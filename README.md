@@ -7,12 +7,13 @@
   ·
   <a href=".github/ISSUE_TEMPLATE/feature_request.md">Request Feature</a>
   <br/><br/>
-  <img src="https://img.shields.io/github/created-at/RanitManik/Taskly" alt="GitHub Created At">
-  <img src="https://img.shields.io/github/repo-size/RanitManik/Taskly" alt="GitHub Repo Size">
-  <img src="https://img.shields.io/github/discussions/RanitManik/Taskly" alt="GitHub Discussions">
-  <img src="https://img.shields.io/github/license/RanitManik/Taskly" alt="GitHub License">
-  <img src="https://img.shields.io/github/stars/RanitManik/Taskly?style=default" alt="GitHub Stars">
-  <img src="https://img.shields.io/github/forks/RanitManik/Taskly?style=default" alt="GitHub Forks">
+  <img src="https://img.shields.io/github/created-at/RanitManik/taskly" alt="GitHub Created At">
+  <img src="https://img.shields.io/github/repo-size/RanitManik/taskly" alt="GitHub Repo Size">
+  <img src="https://img.shields.io/github/discussions/RanitManik/taskly" alt="GitHub Discussions">
+  <img src="https://img.shields.io/github/license/RanitManik/taskly" alt="GitHub License">
+  <br/>
+  <img src="https://img.shields.io/github/stars/RanitManik/taskly?style=default" alt="GitHub Stars">
+  <img src="https://img.shields.io/github/forks/RanitManik/taskly?style=default" alt="GitHub Forks">
   <img src="https://wakatime.com/badge/github/RanitManik/taskly.svg" alt="Wakatime Badge">
 </div>  
 
