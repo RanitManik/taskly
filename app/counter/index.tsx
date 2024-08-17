@@ -1,109 +1,163 @@
-import { Text, View, StyleSheet, TouchableOpacity, Alert } from "react-native";
+import {
+    Text,
+    View,
+    StyleSheet,
+    TouchableOpacity,
+    Alert,
+    ActivityIndicator,
+} from "react-native";
 import { theme } from "../../theme";
 import { registerForPushNotificationsAsync } from "../../utils/registerForPushNotificationsAsync";
 import * as Notifications from "expo-notifications";
 import { useEffect, useState } from "react";
-import { Duration, intervalToDuration, isBefore } from "date-fns";
+import { intervalToDuration, isBefore } from "date-fns";
+import { getFromStorage, saveToStorage } from "../../utils/storage";
 import { TimeSegment } from "../../components/TimeSegmant";
 
-// 10 seconds from now
-const timestamp = Date.now() + 10 * 1000;
+const frequency = 10 * 1000;
+
+const countdownStorageKey = "taskly-countdown";
+
+type PersistedCountdownState = {
+    currentNotificationId: string | undefined;
+    completedAtTimestamps: number[];
+};
 
 type CountdownStatus = {
     isOverdue: boolean;
-    distance: Duration;
+    distance: ReturnType<typeof intervalToDuration>;
 };
 
 export default function CounterScreen() {
+    const [loading, setLoading] = useState(true);
+    const [countdownState, setCountdownState] =
+        useState<PersistedCountdownState>();
     const [status, setStatus] = useState<CountdownStatus>({
         isOverdue: false,
         distance: {},
     });
 
     useEffect(() => {
-        const intervalID = setInterval(() => {
-            const isOverdue = isBefore(timestamp, Date.now());
-            const distance = intervalToDuration(
-                isOverdue
-                    ? { start: timestamp, end: Date.now() }
-                    : {
-                          start: Date.now(),
-                          end: timestamp,
-                      },
-            );
-            setStatus({ isOverdue, distance });
-        }, 1000);
-        return () => {
-            clearInterval(intervalID);
+        const init = async () => {
+            const value = await getFromStorage(countdownStorageKey);
+            setCountdownState(value);
         };
+        init();
     }, []);
 
+    const lastCompletedTimestamp = countdownState?.completedAtTimestamps?.[0];
+
+    useEffect(() => {
+        const intervalId = setInterval(() => {
+            const timestamp = lastCompletedTimestamp
+                ? lastCompletedTimestamp + frequency
+                : Date.now();
+            if (lastCompletedTimestamp) {
+                setLoading(false);
+            }
+            const isOverdue = isBefore(timestamp, Date.now());
+
+            const distance = intervalToDuration(
+                isOverdue
+                    ? { end: Date.now(), start: timestamp }
+                    : { start: Date.now(), end: timestamp },
+            );
+
+            setStatus({ isOverdue, distance });
+        }, 1000);
+
+        return () => {
+            clearInterval(intervalId);
+        };
+    }, [lastCompletedTimestamp]);
+
     const scheduleNotification = async () => {
+        let pushNotificationId;
         const result = await registerForPushNotificationsAsync();
         if (result === "granted") {
-            await Notifications.scheduleNotificationAsync({
+            pushNotificationId = await Notifications.scheduleNotificationAsync({
                 content: {
-                    title: "I am a Notification from your app 😁",
+                    title: "The thing is due!",
                 },
                 trigger: {
-                    seconds: 5,
+                    seconds: frequency / 1000,
                 },
             });
         } else {
             Alert.alert(
-                "Unable to schedule notifications",
-                "Enable the notification permission for the app in the settings",
+                "Unable to schedule notification",
+                "Enable the notifications permission for Expo Go in settings",
             );
         }
+
+        if (countdownState?.currentNotificationId) {
+            await Notifications.cancelScheduledNotificationAsync(
+                countdownState.currentNotificationId,
+            );
+        }
+
+        const newCountdownState: PersistedCountdownState = {
+            currentNotificationId: pushNotificationId,
+            completedAtTimestamps: countdownState?.completedAtTimestamps
+                ? [Date.now(), ...countdownState.completedAtTimestamps]
+                : [Date.now()],
+        };
+
+        setCountdownState(newCountdownState);
+
+        await saveToStorage(countdownStorageKey, newCountdownState);
     };
+
+    if (loading) {
+        return (
+            <View style={styles.activityIndicatorContainer}>
+                <ActivityIndicator size={60} color={theme.colorCerulean} />
+            </View>
+        );
+    }
 
     return (
         <View
             style={[
                 styles.container,
-                status.isOverdue ? styles.containerLate : null,
+                status.isOverdue ? styles.containerLate : undefined,
             ]}
         >
-            {status.isOverdue ? (
-                <Text
-                    style={[
-                        styles.heading,
-                        status.isOverdue && styles.whiteText,
-                    ]}
-                >
-                    This is Overdue by
-                </Text>
+            {!status.isOverdue ? (
+                <Text style={[styles.heading]}>Thing due in</Text>
             ) : (
-                <Text style={styles.heading}>Thing due in...</Text>
+                <Text style={[styles.heading, styles.whiteText]}>
+                    Thing overdue by
+                </Text>
             )}
             <View style={styles.row}>
                 <TimeSegment
-                    number={status.distance.days ?? 0}
-                    unit={"Days"}
-                    textStyle={status.isOverdue && styles.whiteText}
+                    unit="Days"
+                    number={status.distance?.days ?? 0}
+                    textStyle={status.isOverdue ? styles.whiteText : undefined}
                 />
                 <TimeSegment
-                    number={status.distance.hours ?? 0}
-                    unit={"Hours"}
-                    textStyle={status.isOverdue && styles.whiteText}
+                    unit="Hours"
+                    number={status.distance?.hours ?? 0}
+                    textStyle={status.isOverdue ? styles.whiteText : undefined}
                 />
                 <TimeSegment
-                    number={status.distance.minutes ?? 0}
-                    unit={"Minutes"}
-                    textStyle={status.isOverdue && styles.whiteText}
+                    unit="Minutes"
+                    number={status.distance?.minutes ?? 0}
+                    textStyle={status.isOverdue ? styles.whiteText : undefined}
                 />
                 <TimeSegment
-                    number={status.distance.seconds ?? 0}
-                    unit={"Seconds"}
-                    textStyle={status.isOverdue && styles.whiteText}
+                    unit="Seconds"
+                    number={status.distance?.seconds ?? 0}
+                    textStyle={status.isOverdue ? styles.whiteText : undefined}
                 />
             </View>
             <TouchableOpacity
+                onPress={scheduleNotification}
                 style={styles.button}
                 activeOpacity={0.8}
-                onPress={scheduleNotification}
             >
-                <Text style={styles.buttonText}>I have completed the task</Text>
+                <Text style={styles.buttonText}>I've done the thing!</Text>
             </TouchableOpacity>
         </View>
     );
@@ -114,22 +168,24 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
-        backgroundColor: "#fff",
+        backgroundColor: theme.colorWhite,
     },
-    containerLate: {
-        backgroundColor: theme.colorRed,
+    activityIndicatorContainer: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: theme.colorWhite,
     },
     button: {
         backgroundColor: theme.colorBlack,
-        paddingVertical: 12,
-        paddingHorizontal: 24,
+        padding: 12,
         borderRadius: 6,
     },
     buttonText: {
+        color: "#fff",
         fontWeight: "bold",
-        letterSpacing: 1,
         textTransform: "uppercase",
-        color: theme.colorWhite,
+        letterSpacing: 1,
     },
     row: {
         flexDirection: "row",
@@ -139,6 +195,10 @@ const styles = StyleSheet.create({
         fontSize: 24,
         fontWeight: "bold",
         marginBottom: 24,
+        color: theme.colorBlack,
+    },
+    containerLate: {
+        backgroundColor: theme.colorRed,
     },
     whiteText: {
         color: theme.colorWhite,
