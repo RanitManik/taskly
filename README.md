@@ -1,7 +1,7 @@
 <div align="center">
   <img height="80px" src="https://github.com/user-attachments/assets/7ac1307f-281d-4b02-a8de-68a01f44ef86" alt="Taskly favicon">
   <h1>Taskly – Simple To-Do List & Coding Reminder</h1>
-  <a href="https://github.com/RanitManik/taskly/releases/tag/v1.0.0">View Demo</a>
+  <a href="https://github.com/RanitManik/taskly/releases/download/v1.0.0/taskly.apk">Install App</a>
   ·
   <a href=".github/ISSUE_TEMPLATE/bug_report.md">Report Bug</a>
   ·
@@ -18,6 +18,10 @@
 </div>  
 
 Welcome to **Taskly – *Your Simple To-Do List & Coding Reminder***, a lightweight and user-friendly app designed to help you stay organized and consistent in your coding journey.
+
+> [!NOTE]
+> To install the Taskly app on your device, please visit the [release page](https://github.com/RanitManik/taskly/releases/).
+> There, you'll find the latest APK available for download and installation on your phone.
 
 ## Table of Contents
 
@@ -60,7 +64,6 @@ Taskly is built with a modern stack that ensures both performance and developer 
 - **React Native**: Enables cross-platform mobile app development with React.
 - **TypeScript**: Provides type safety and improves code quality.
 - **Expo**: Simplifies the development and deployment of React Native apps.
-- **Tailwind CSS**: A utility-first CSS framework for building custom designs rapidly.
 - **ESLint**: Ensures consistent code quality with linting rules.
 - **Prettier**: Automatically formats code to maintain a consistent style.
 
