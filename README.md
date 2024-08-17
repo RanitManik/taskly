@@ -17,9 +17,10 @@
   <img src="https://wakatime.com/badge/github/RanitManik/taskly.svg" alt="Wakatime Badge">
 </div>  
 
+<br/>
+  
 Welcome to **Taskly – *Your Simple To-Do List & Coding Reminder***, a lightweight and user-friendly app designed to help you stay organized and consistent in your coding journey.
 
-> [!NOTE]
 > To install the Taskly app on your device, please visit the [release page](https://github.com/RanitManik/taskly/releases/).
 > There, you'll find the latest APK available for download and installation on your phone.
 
