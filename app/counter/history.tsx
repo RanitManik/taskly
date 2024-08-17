@@ -33,7 +33,7 @@ export default function HistoryScreen() {
             )}
             ListEmptyComponent={
                 <View style={styles.listEmptyContainer}>
-                    <Text>Your shopping list is empty</Text>
+                    <Text>Your coding history list is currently empty.</Text>
                 </View>
             }
         />

@@ -100,12 +100,12 @@ export default function Index() {
             stickyHeaderIndices={[0]}
             ListEmptyComponent={
                 <View style={styles.listEmptyContainer}>
-                    <Text>Your shopping list is empty</Text>
+                    <Text>Your todo list is empty</Text>
                 </View>
             }
             ListHeaderComponent={
                 <TextInput
-                    placeholder="E.g. coffee"
+                    placeholder="E.g. complete JAVA assignment"
                     style={styles.textInput}
                     onChangeText={setValue}
                     returnKeyType="done"
@@ -161,7 +161,8 @@ const styles = StyleSheet.create({
     textInput: {
         borderColor: theme.colorLightGrey,
         borderWidth: 2,
-        padding: 12,
+        paddingVertical: 12,
+        paddingHorizontal: 24,
         marginHorizontal: 12,
         marginBottom: 12,
         fontSize: 18,

@@ -9,7 +9,7 @@ export default function Layout() {
             <Tabs.Screen
                 name="index"
                 options={{
-                    title: "Shopping list",
+                    title: "todo list",
                     tabBarIcon: ({ color, size }) => (
                         <FontAwesome6
                             name="list-ul"
