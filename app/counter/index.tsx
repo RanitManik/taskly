@@ -68,6 +68,7 @@ export default function CounterScreen() {
             );
 
             setStatus({ isOverdue, distance });
+            setLoading(false);
         }, 1000);
 
         return () => {
