@@ -1,7 +1,7 @@
 <div align="center">
   <img height="80px" src="https://github.com/user-attachments/assets/7ac1307f-281d-4b02-a8de-68a01f44ef86" alt="Taskly favicon">
   <h1>Taskly – Simple To-Do List & Coding Reminder</h1>
-  <a href="https://github.com/RanitManik/taskly/releases/download/v1.0.0/taskly.apk">Install App</a>
+  <a href="https://github.com/RanitManik/taskly/releases/download/v1.0.0/taskly.apk">Install APK</a>
   ·
   <a href=".github/ISSUE_TEMPLATE/bug_report.md">Report Bug</a>
   ·
